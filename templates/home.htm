@@ -1,0 +1,62 @@
+<!doctype html>
+{% extends "base.htm" %}
+{% block title %}Amazoo{% endblock %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+<div class="container-fluid text-center content py-1 my-1">
+  <h1>Amazoo</h1>
+  <div class="row justify-content-center">
+    <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6 col-8 px-2
+      my-2">
+      {% if current_user.admin %}
+      <a href="{{url_for('add_product')}}" class="btn btn-lg btn-light
+        btn-outline-dark p-2 my-2">Add Product</a>
+      {% endif %}
+  </div>
+</div>
+</div>
+{% if product_list|length > 0%}
+<div class="row justify-content-center m-5">
+{% for product in product_list %}
+<div class="col-lg-8 col-md-10 col-10">
+  <div class="card mb-3 ">
+    <div class="row g-0 ">
+      <div class="col-md-4 product-img-wrapper border">
+        <img src="{{product.img_url}}" class="img-fluid rounded-start product-img " alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{product.name}}</h5>
+          <p class="card-text">{{product.description}}</p>
+          <p class="card-text">{{product.price}}€</p>
+          <a class="btn btn-lg btn-outline-dark p-2" href="{{url_for('add_cart', id = product.id)}}">Add to cart</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%endfor%}
+</div>
+{% endif %}
+
+
+{% else %}
+<div class="container-fluid text-center content py-5 my-5">
+  <h1>Welcome, Friend.</h1>
+  <div class="row justify-content-center">
+    <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6 col-8 px-2
+      my-2">
+      <a href="{{url_for('register')}}" class="btn btn-lg btn-light
+        btn-outline-dark home-btn">Register</a>
+    </div>
+    <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6 col-8 px-2
+      my-2">
+      <a class="btn btn-lg btn-outline-dark btn-light home-btn"
+        href="{{url_for('login')}}">Login</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

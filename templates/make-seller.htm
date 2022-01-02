@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% extends "base.htm" %}
+{% block content %}
+{% import "bootstrap/wtf.html" as wtf %}
+<div class="container-fluid text-center">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    {{wtf.quick_form(form, button_map={'submit': 'outline-dark'},
+    novalidate=True)}}
+</div>
+
+{%endblock%}

@@ -1,0 +1,16 @@
+.product-img-wrapper{
+    aspect-ratio: 1 / 1 !important;
+}
+.product-img{
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.border{
+    border: solid !important;
+    border-color: #777 !important;
+    border-width: 2px !important;
+    border-style: round;
+    border-radius: 4px;
+}
