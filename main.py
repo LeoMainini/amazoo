@@ -1,4 +1,6 @@
 
+
+from os import name
 from flask import Flask, redirect, render_template, url_for, request, flash, abort
 from functools import wraps
 from flask_bootstrap import Bootstrap
@@ -9,13 +11,13 @@ from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from flask_login import UserMixin, login_required, login_user, logout_user, LoginManager, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from urllib.parse import urlparse, urljoin
 
 #TODO: Functionality
-#   Implrement search
 #   Add many-one rel products-seller
 #   Add Stripe for payment processing
  
@@ -28,6 +30,8 @@ lm = LoginManager(app)
 Bootstrap(app)
 db = SQLAlchemy(app)
 lm
+
+
 
 class Customer(db.Model, UserMixin):
     __tablename__ = 'customer'
@@ -231,9 +235,25 @@ def cart():
     user_orders = db.session.query(Customer).get(current_user.id).orders
     cart = [order for order in user_orders if order.bought == False]
     if cart:
-        return render_template('cart.htm', cart = cart[0])
+        sum = 0
+        for item in cart[0].products:
+            sum += item.price
+        return render_template('cart.htm', cart = cart[0], sum=sum)
     else:
         return render_template('cart.htm', cart = [])
+
+
+@app.route("/search", methods=["POST"])
+def search():
+    if 'search' in request.form.keys():
+        search = request.form.to_dict()['search']
+        if search:  
+            items = Product.query.filter(func.lower(Product.name).contains(func.lower(search))).all()
+            return render_template('search.htm', items=items, term=search)
+        return redirect(url_for('home'))
+    return redirect(url_for('home'))
+        
+
 
 if __name__ == "__main__":
     app.run(debug=True)

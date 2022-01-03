@@ -1,0 +1,43 @@
+<!doctype html>
+{% extends "base.htm" %}
+{% block title %}Amazoo{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center content py-1 my-1">
+    <h1>{{term}}</h1>
+    <div class="container-fluid p-2">
+        {% if items|length > 0 %}
+        <div class="row justify-content-center mx-1 border">
+            {% for product in items %}
+            <div class="col-lg-8 col-md-10 col-10">
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-4 product-img-wrapper border">
+                            <img src="{{product.img_url}}" class="img-fluid
+                                rounded-start product-img"alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{product.name}}</h5>
+                                <p class="card-text">{{product.description}}</p>
+                                <p class="card-text">{{product.price}}€</p>
+                                <a class="btn btn-lg btn-outline-dark p-2"
+                                    href="{{url_for('add_cart', id=
+                                    product.id)}}">Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {%endfor%}
+        </div>
+        {% else %}
+
+        <h2 class="py-5 my-5">No items found.</h2>
+
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
