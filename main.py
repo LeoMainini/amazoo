@@ -284,7 +284,20 @@ def search():
 @app.route("/payment-confirmed")
 @login_required
 def sucess():
+    user_orders = current_user.orders
+    order = [order for order in user_orders if not order.bought][0]
+    bought_order = db.session.query(Order).get(order.id)
+    print(f"id={bought_order.id}")
+    bought_order.bought = True
+    db.session.commit()
     flash("Payment confirmed.")
+    return render_template("post-sale.htm")
+
+
+@app.route("/payment-failed")
+@login_required
+def payment_failed():
+    flash("Checkout failed")
     return render_template("post-sale.htm")
 
 
@@ -307,9 +320,8 @@ def create_checkout_session():
             }for product in order.products],
             mode='payment',
             success_url=f"{request.url_root[:-1]}{url_for('sucess')}",
-            cancel_url=f"{request.url_root[:-1]}{url_for('home')}",
+            cancel_url=f"{request.url_root[:-1]}{url_for('payment_failed')}",
         )
-
     except stripe.error.CardError as e:
         flash("Payment declined, try again or try a different payment method.")
     except stripe.error.RateLimitError as e:
@@ -322,12 +334,7 @@ def create_checkout_session():
     except stripe.error.APIConnectionError as e:
         flash("Something went wrong with the payment processor, it may be down, try again later.")
     except stripe.error.StripeError as e:
-        flash("Something went wrong, try again later.")
-    else:
-        bought_order = db.session.query(Order).get(order.id)
-        print(f"id={bought_order.id}")
-        bought_order.bought = True
-        db.session.commit()
+        flash("Something went wrong, try again later.")        
     finally:
         return redirect(session.url, code=303)
 
