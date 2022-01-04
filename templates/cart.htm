@@ -4,40 +4,54 @@
 
 {% block content %}
 <div class="container-fluid text-center py-1 my-1">
-<h1>Cart</h1>
-<div class="container-fluid p-2">
-{% if cart.products|length > 0 %}
-<div class="row justify-content-center mx-1 py-2 border">
-{% for product in cart.products %}
-<div class="col-lg-8 col-md-10 col-10">
-  <div class="card my-2 ">
-    <div class="row g-0 ">
-      <div class="col-md-4 product-img-wrapper border">
-        <img src="{{product.img_url}}" class="img-fluid rounded-start product-img " alt="...">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title">{{product.name}}</h5>
-          <p class="card-text">{{product.description}}</p>
-          <p class="card-text">{{product.price}}€</p>
-          <!-- <a class="btn btn-lg btn-outline-dark p-2" href="{{url_for('add_cart', id = product.id)}}">Add to cart</a> -->
+  <h1>Cart</h1>
+  <div class="container-fluid p-2">
+    {% if cart.products|length > 0 %}
+    <div class="row justify-content-center mx-1 py-2 border">
+      {% for product in cart.products %}
+      <div class="col-lg-8 col-md-10 col-10">
+        <div class="card my-2">
+          <div class="row g-0">
+            <div class="col-md-4 product-img-wrapper border">
+              <img src="{{product.img_url}}" class="img-fluid rounded-start
+                product-img"alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description}}</p>
+                <p class="card-text">{{product.price}}€</p>
+                <!-- <a class="btn btn-lg btn-outline-dark p-2" href="{{url_for('add_cart', id = product.id)}}">Add to cart</a> -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-{%endfor%}
-</div>
-{% endif %}
-</div>
-<div class="row justify-content-end container-fluid align-items-center">
-  <p style="font-size: 1.5rem;" class="col-xxl-1 col-xl-2 col-md-3 col-sm-4 col-6 px-2
-  my-2 text-end">{{sum}}€</p>
-  <a href="{{url_for('add_product')}}" class="btn btn-lg btn-light
+      {%endfor%}
+    </div>
+    {% else %}
+    <h4 class="py-2">Cart is empty.</h4>
+    <a href="{{url_for('home')}}" class="btn btn-lg btn-light
           btn-outline-dark col-xxl-1 col-xl-2 col-md-3 col-sm-4 col-6 px-2
-          my-2">Checkout</a>
-</div>
+          my-2">Go home</a>
+    {% endif %}
+  </div>
+  {% if cart.products|length > 0 %}
+  <div class="row justify-content-end container-fluid align-items-center">
+    <p style="font-size: 1.5rem;" class="col-xxl-1 col-xl-2 col-md-3 col-sm-4
+      col-6 px-2
+      my-2 text-end">{{sum}}€</p>
+      <form action="{{url_for('create_checkout_session')}}" method="POST" class="col-xxl-1 col-xl-2 col-md-3 col-sm-4 col-6 px-2
+      my-2">
+        <button type="submit" class="btn btn-lg btn-light
+        btn-outline-dark">Checkout</button>
+      </form>
+    <!-- <a href="{{url_for('create_checkout_session')}}" class="btn btn-lg btn-light
+      btn-outline-dark col-xxl-1 col-xl-2 col-md-3 col-sm-4 col-6 px-2
+      my-2">Checkout</a> -->
+  </div>
+  {% endif %}
 </div>
 
 {% endblock %}

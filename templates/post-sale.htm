@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% extends "base.htm" %}
+{% block content %}
+<div class="container-fluid text-center">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <h2>{{ message }}</h2>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <a href="{{url_for('home')}}" class="btn btn-lg btn-light
+          btn-outline-dark col-xxl-1 col-xl-2 col-md-3 col-sm-4 col-6 px-2
+          my-2">Go home</a>
+</div>
+
+{%endblock%}
