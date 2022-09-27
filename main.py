@@ -25,7 +25,7 @@ from urllib.parse import urlparse, urljoin
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///store2.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 lm = LoginManager(app)
 Bootstrap(app)
 db = SQLAlchemy(app)
